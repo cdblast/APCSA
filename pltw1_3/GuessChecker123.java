@@ -1,4 +1,4 @@
-package pltw1_3;
+//package pltw1_3;
 /*
  * Activity 1.3.2
  */
@@ -37,18 +37,34 @@ public class GuessChecker123
     int[] guessArray = {g1, g2, g3, g4};
 
     int hitCounter = 0;
+    int nearHitCounter = 0;
 
+    //calculating complete hits
     for (int i = 0; i < 4; i++) {
-      System.out.print("for loop" + i + ": ");
+      //System.out.print("hits: for loop" + i + ": ");
       if (targArray[i] == guessArray[i]){
-        System.out.println("the " + i + " digit is correct: " + targArray[i]);
+        //System.out.println("the " + i + " digit is correct: " + targArray[i]);
         hitCounter++;
       }
       else {
-        System.out.println("No hit.");
+        //System.out.println("No hit.");
       }
     }
-    System.out.println("There are " + hitCounter + " hits in total.");
+    //calculating near-hits
+    for (int i = 0; i < 4; i++){
+      //System.out.print("near hits: for loop" + i + ": ");
+      for (int o = 0; o < 4; o++){
+        if (i != o){
+          if (targArray[i] == guessArray[o]){
+            //System.out.println("the " + i + " digit is a near hit with digit " + o + ", " + targArray[o]);
+            nearHitCounter++;
+          }
+        }
+      }
+    }
+    System.out.println("There are " + hitCounter + " hits, and " + nearHitCounter + " near-hits. ");
+
+
 
     // close Scanner when done
     sc.close();
