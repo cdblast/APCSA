@@ -51,7 +51,7 @@ public class EscapeRoom
     // size of move
     int m = 60; 
     // individual player moves
-    int px = 0;
+    int px = 0; // track player's column (0..7)
     int py = 0; 
     
     int score = 0;
@@ -59,48 +59,160 @@ public class EscapeRoom
     Scanner in = new Scanner(System.in);
     String[] validCommands = { "right", "left", "up", "down", "r", "l", "u", "d",
     "jump", "jr", "jumpleft", "jl", "jumpup", "ju", "jumpdown", "jd",
-    "pickup", "p", "quit", "q", "replay", "help", "?"};
+    "pickup", "p", "quit", "q", "replay", "restart", "help", "?"};
   
     // set up game
     boolean play = true;
+    boolean ended = false; // tracks whether endGame() has already been called
     System.out.println("Type 'help' or '?' for a list of commands.");
     while (play)
     {
-      /* TODO: get all the commands working */
-	  /* Your code here */
-    
-    String input = UserInput.getValidInput(validCommands);
+      /* Read raw input so we can penalize invalid commands */
+      String input = "";
+      boolean valid = false;
+      do {
+        System.out.print("> ");
+        input = in.nextLine().trim();
+        for (String cmd : validCommands)
+        {
+          if (input.equalsIgnoreCase(cmd)) { valid = true; break; }
+        }
+        if (!valid)
+        {
+          System.out.println("Invalid input. Please try again");
+          score -= 1; // penalty for invalid command
+          System.out.println("Score: " + score);
+        }
+      } while(!valid);
+
+      // every valid command increases the score by 1
+      score += 1;
       if (input.equalsIgnoreCase("right") || input.equalsIgnoreCase("r"))
       {
-        game.movePlayer(60,0);
+        if (game.isTrap(m,0))
+        {
+          // sprung traps decrease the score
+          score -= game.springTrap(m,0);
+        }
+        int res = game.movePlayer(m,0);
+        score += res;
+        // if move succeeded (non-negative return), update column
+        if (res >= 0) {
+          px += 1;
+          // if we've reached rightmost column (column index 7), end game
+          if (px >= 7) {
+            // ensure GUI updates player location before endGame checks it
+            game.repaint();
+            try { Thread.sleep(120); } catch (InterruptedException ie) { }
+            int endScore = game.endGame();
+            score += endScore;
+            if (endScore > 0) {
+              System.out.println("Congratulations! You have reached the end of the game.");
+              System.out.println("Your final score is: " + score);
+            } else {
+              System.out.println("Game ended.");
+              System.out.println("score=" + score);
+            }
+            System.out.println("steps=" + game.getSteps());
+            play = false;
+            ended = true;
+            break;
+          }
+        }
       }
       if (input.equalsIgnoreCase("left") || input.equalsIgnoreCase("l"))
       {
-        game.movePlayer(-60,0);
+        if (game.isTrap(-m,0))
+        {
+          score -= game.springTrap(-m,0);
+        }
+        int res = game.movePlayer(-m,0);
+        score += res;
+        if (res >= 0) {
+          px = Math.max(0, px - 1);
+        }
       }
       if (input.equalsIgnoreCase("up") || input.equalsIgnoreCase("u"))
       {
-        game.movePlayer(0,-60);
+        if (game.isTrap(0,-m))
+        {
+          score -= game.springTrap(0,-m);
+        }
+        int res = game.movePlayer(0,-m);
+        score += res;
+        // up/down do not change column
       }
       if (input.equalsIgnoreCase("down") || input.equalsIgnoreCase("d"))
       {
-        game.movePlayer(0,60);
+        if (game.isTrap(0,m))
+        {
+          score -= game.springTrap(0,m);
+        }
+        int res = game.movePlayer(0,m);
+        score += res;
+        // up/down do not change column
       }
       if (input.equalsIgnoreCase("jump") || input.equalsIgnoreCase("jr"))
       {
-        game.movePlayer(120,0);
+        if (game.isTrap(2*m,0))
+        {
+          score -= game.springTrap(2*m,0);
+        }
+        int res = game.movePlayer(2*m,0);
+        score += res;
+        if (res >= 0) {
+          px += 2;
+          if (px >= 7) {
+            // ensure GUI updates player location before endGame checks it
+            game.repaint();
+            try { Thread.sleep(120); } catch (InterruptedException ie) { }
+            int endScore = game.endGame();
+            score += endScore;
+            if (endScore > 0) {
+              System.out.println("Congratulations! You have reached the end of the game.");
+              System.out.println("Your final score is: " + score);
+            } else {
+              System.out.println("Game ended.");
+              System.out.println("score=" + score);
+            }
+            System.out.println("steps=" + game.getSteps());
+            play = false;
+            ended = true;
+            break;
+          }
+        }
       }
       if (input.equalsIgnoreCase("jumpleft") || input.equalsIgnoreCase("jl"))
       {
-        game.movePlayer(-120,0);
+        if (game.isTrap(2*-m,0))
+        {
+          score -= game.springTrap(2*-m,0);
+        }
+        int res = game.movePlayer(2*-m,0);
+        score += res;
+        if (res >= 0) {
+          px = Math.max(0, px - 2);
+        }
       }
       if (input.equalsIgnoreCase("jumpup") || input.equalsIgnoreCase("ju"))
       {
-        game.movePlayer(0,-120);
+        if (game.isTrap(0,2*-m))
+        {
+          score -= game.springTrap(0,2*-m);
+        }
+        int res = game.movePlayer(0,2*-m);
+        score += res;
+        // up/down do not change column
       }
       if (input.equalsIgnoreCase("jumpdown") || input.equalsIgnoreCase("jd"))
       {
-        game.movePlayer(0,120);
+        if (game.isTrap(0,2*m))
+        {
+          score -= game.springTrap(0,2*m);
+        }
+        int res = game.movePlayer(0,2*m);
+        score += res;
+        // up/down do not change column
       }
       if (input.equalsIgnoreCase("pickup") || input.equalsIgnoreCase("p"))
       {
@@ -113,7 +225,24 @@ public class EscapeRoom
       if (input.equalsIgnoreCase("replay"))
       {
         System.out.println("Steps taken: " + game.getSteps());
-        game.replay();
+        score += game.replay();
+      }
+      if (input.equalsIgnoreCase("restart"))
+      {
+        // If game already ended (frame disposed), create a fresh GameGUI; otherwise just replay
+        if (ended)
+        {
+          game = new GameGUI();
+          game.createBoard();
+          ended = false;
+        }
+        else
+        {
+          game.replay();
+        }
+        score = 0;
+        px = 0;
+        System.out.println("Game restarted. Score reset to 0.");
       }
       if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")){
         System.out.println("Commands you can use are:");
@@ -123,7 +252,10 @@ public class EscapeRoom
 
   
 
-    score += game.endGame();
+    if (!ended) 
+    {
+      score += game.endGame();
+    }
 
     System.out.println("score=" + score);
     System.out.println("steps=" + game.getSteps());
