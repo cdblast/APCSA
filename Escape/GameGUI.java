@@ -62,6 +62,8 @@ public class GameGUI extends JComponent
   // game frame
   private JFrame frame;
 
+  Random random = new Random();
+
   /**
    * Constructor for the GameGUI class.
    * Creates a frame with a background image and a player that will move around the board.
@@ -82,7 +84,12 @@ public class GameGUI extends JComponent
   
     // player image, student can customize this image by changing file on disk
     try {
-      player = ImageIO.read(new File("player.png"));      
+      if (random.nextInt(2) == 0) {
+        player = ImageIO.read(new File("player3.png"));      
+      }
+      else {
+        player = ImageIO.read(new File("player2.png"));      
+      }
     } catch (Exception e) {
      System.err.println("Could not open file player.png");
     }

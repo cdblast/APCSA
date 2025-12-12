@@ -63,13 +63,63 @@ public class EscapeRoom
   
     // set up game
     boolean play = true;
+    System.out.println("Type 'help' or '?' for a list of commands.");
     while (play)
     {
       /* TODO: get all the commands working */
 	  /* Your code here */
     
-      
-    }
+    String input = UserInput.getValidInput(validCommands);
+      if (input.equalsIgnoreCase("right") || input.equalsIgnoreCase("r"))
+      {
+        game.movePlayer(60,0);
+      }
+      if (input.equalsIgnoreCase("left") || input.equalsIgnoreCase("l"))
+      {
+        game.movePlayer(-60,0);
+      }
+      if (input.equalsIgnoreCase("up") || input.equalsIgnoreCase("u"))
+      {
+        game.movePlayer(0,-60);
+      }
+      if (input.equalsIgnoreCase("down") || input.equalsIgnoreCase("d"))
+      {
+        game.movePlayer(0,60);
+      }
+      if (input.equalsIgnoreCase("jump") || input.equalsIgnoreCase("jr"))
+      {
+        game.movePlayer(120,0);
+      }
+      if (input.equalsIgnoreCase("jumpleft") || input.equalsIgnoreCase("jl"))
+      {
+        game.movePlayer(-120,0);
+      }
+      if (input.equalsIgnoreCase("jumpup") || input.equalsIgnoreCase("ju"))
+      {
+        game.movePlayer(0,-120);
+      }
+      if (input.equalsIgnoreCase("jumpdown") || input.equalsIgnoreCase("jd"))
+      {
+        game.movePlayer(0,120);
+      }
+      if (input.equalsIgnoreCase("pickup") || input.equalsIgnoreCase("p"))
+      {
+        score += game.pickupPrize();
+      }
+      if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q"))
+      {
+        play = false;
+      }
+      if (input.equalsIgnoreCase("replay"))
+      {
+        System.out.println("Steps taken: " + game.getSteps());
+        game.replay();
+      }
+      if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("?")){
+        System.out.println("Commands you can use are:");
+        System.out.println("right, r, left, l, up, u, down, d, jump, jr, jumpleft, jl, jumpup, ju, jumpdown, jd, pickup, p, quit, q, replay");
+      }
+    } 
 
   
 
