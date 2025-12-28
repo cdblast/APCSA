@@ -83,8 +83,8 @@ public class GameGUI extends JComponent
     }
   
     // player image, student can customize this image by changing file on disk
-    try {
-      if (random.nextInt(2) == 0) {
+    try {//this code makes it a 1 in 100 chance that player3.png is used, otherwisde player2 is used
+      if (random.nextInt(100) == 0) {
         player = ImageIO.read(new File("player3.png"));      
       }
       else {
