@@ -31,6 +31,14 @@ public class Player
   
   /* your code here - accessor(s) */ 
 
+  public int getScore(){
+    return score;
+  }
+
   /* your code here - mutator(s) */ 
+
+  public void updateScore(int change){
+    score += change;
+  }
 
 }
