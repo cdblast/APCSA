@@ -20,12 +20,16 @@ public class  Board
     concealPhrase();
     System.out.println("Solved Phrase: " + solvedPhrase); //temp test code
   }
+
   /* your code here - accessor(s) */
   public String getGuess(){
     return phrase;
   }
   public String getPhrase(){
     return solvedPhrase;
+  }
+  public int getLetterValue(){
+    return currentLetterValue;
   }
 
   /* your code here - mutator(s)  */
@@ -47,12 +51,10 @@ public class  Board
     String newPhrase = phrase;
     for (int i = 0; i < solvedPhrase.length(); i++)
     {
-      System.out.println(i);
-      if (solvedPhrase.substring(i, i + 1).equals(" "))
+      if (solvedPhrase.substring(i, i + 1).equals(letter))
       {
-        System.out.println("Comparing " + solvedPhrase.substring(i, i + 1) + " to " + letter + ": Phrase: " + phrase + " Newphrase: " + newPhrase);
         newPhrase = phrase.substring(0, i) + letter + phrase.substring(i + 1, phrase.length());
-//newPhrase += letter;
+        phrase = newPhrase;
       }
     }
     phrase = newPhrase;
@@ -64,7 +66,7 @@ public class  Board
 
     if (length == 1){
       boolean isCorrect = guessLetter(toInterpret);
-      System.out.println("interpreting as letter");
+      //System.out.println("interpreting as letter");
 /*
           for (int i = 0; i < phrase.length(); i++)
           {
@@ -76,8 +78,8 @@ public class  Board
           }*/
 
       if (isCorrect){
-        System.out.println("letter correct");
-        revealPhraseByLetter(toInterpret);
+        //System.out.println("letter correct");
+        //revealPhraseByLetter(toInterpret);
         return 1;
       }
     }
@@ -159,21 +161,22 @@ public class  Board
   public boolean guessLetter(String guess)
   {
     boolean foundLetter = false;
-//    String newSolvedPhrase = "";
+    //String newSolvedPhrase = "";
     
     for (int i = 0; i < solvedPhrase.length(); i++)
     {
       if (solvedPhrase.substring(i, i + 1).equals(guess))
       {
-//        newSolvedPhrase += guess + " ";
+        revealPhraseByLetter(guess);
+        //newSolvedPhrase += guess + " ";
         foundLetter = true;
       }
       else
       {
-//        newSolvedPhrase += solvedPhrase.substring(i * 2, i * 2 + 1) + " ";  
+        //newSolvedPhrase += solvedPhrase.substring(i * 2, i * 2 + 1) + " ";  
       }
     }
-//    solvedPhrase = newSolvedPhrase;
+    //solvedPhrase = newSolvedPhrase;
     return foundLetter;
   } 
 } 

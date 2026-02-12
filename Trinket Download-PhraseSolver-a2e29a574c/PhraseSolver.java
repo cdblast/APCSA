@@ -28,19 +28,28 @@ public class PhraseSolver
     while (!solved) 
     {
       while (!correct){
+        System.out.println("Score: " + player.getScore() + "\nPhrase: " + board.getGuess());
+        
         if(board.getGuess() == board.getPhrase()){
           correct = true;
+          break;
         }
-        System.out.println("Score: " + player.getScore() + "\nPhrase: " + board.getGuess());
+
+
         System.out.println("Type your guess! (Provide either a letter or the entire phrase.):");
+
         String nextGuess = input.nextLine();
-        if(board.interpretGuess(nextGuess) == 2){
+        int guessOutcome = board.interpretGuess(nextGuess);
+        if(guessOutcome == 2){
           correct = true;
+        }
+        else if (guessOutcome == 1){
+          player.updateScore(board.getLetterValue());
         }
       }
       
-      System.out.println("Congrats! The phrase was \"" + board.getPhrase() + "\"! You won the game with " + player.getScore() + " points!");
       /* your code here - determine how game ends */
+      System.out.println("Congrats! The phrase was \"" + board.getPhrase() + "\"! You won the game with " + player.getScore() + " points!");
       solved = true; 
     } 
    
