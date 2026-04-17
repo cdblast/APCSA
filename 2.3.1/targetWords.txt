@@ -1,0 +1,13 @@
+dog
+dogs
+puppy
+pup
+cat
+cats
+kitten
+kitty
+furry
+fuzzy
+animal
+animals
+pet
