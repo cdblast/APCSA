@@ -117,7 +117,7 @@ public class MemoryGameGUI extends JFrame
       } catch (InterruptedException ie) { /* do nothing */ }
 
       // change button color and show the memory string
-      gameButtons[buttonNum].setBackground(new Color(230, 204, 255));
+      gameButtons[buttonNum].setBackground(randomColor());
       gameButtons[buttonNum].setText(sequence[i]);
 
       // wait a bit
@@ -183,6 +183,30 @@ public class MemoryGameGUI extends JFrame
   public void quit()
   {
     this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+  }
+
+  public Color randomColor(){
+    int randomInt = (int)(Math.random() * 6);
+    System.out.println(randomInt);
+    if(randomInt == 5){
+      return new Color(250, 204, 255);
+    }
+    else if(randomInt == 4){
+      return new Color(0, 214, 59);
+    }
+    else if(randomInt == 3){
+      return new Color(142, 103, 193);
+    }
+    else if(randomInt == 2){
+      return new Color(246, 220, 84);
+    }
+    else if(randomInt == 1){
+      return new Color(214, 214, 214);
+    }
+    else{
+      return new Color(150, 204, 255);
+    }
+    
   }
 
 }

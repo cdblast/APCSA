@@ -14,7 +14,7 @@ public class MemoryGame
     // TO DO: Create the "memory strings" - an array of at least 4 single character  
     // strings to show in the buttons, one element at a time. This is the sequence
     // the player will have to remember.
-    String[] memoryStrings = {"L","W","D","S"};
+    String[] memoryStrings = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
     int rounds = 0;
     int score = 0;
 
@@ -28,13 +28,20 @@ public class MemoryGame
     // TO DO: Play the game until user wants to quit.
     while(isPlaying){
         rounds++; //Adding to the rounds counter
+        boolean matched = false; 
+        int matchScore = 0;
         // TO DO: Call the next method in RandomPermutation to create a random version 
         // of the "memory strings"
-        String[] randomSeq = memoryStrings;
+        String[] randomSeq = new String[4];
+        for (int i = 0; i < 4; i++){
+          int rand = (int)(Math.random()*25);
+          randomSeq[i] = memoryStrings[rand];
+          System.out.println(i + " is at " + rand + ", which is " + randomSeq[i]);
+        }
         
         // TO DO: Play one sequence with a .5 second delay. Save the player's guess. 
         // (Later, you can speed up or slow down the game.)
-        String guess = game.playSequence(randomSeq, .5); //og delay is .5
+        String guess = game.playSequence(randomSeq, 0.5); //og delay is .5
         String cleanedGuess = "";
 
         // TO DO: If the guess is not null, determine a match
@@ -46,13 +53,23 @@ public class MemoryGame
             cleanedGuess = guess.replace(",","");
             cleanedGuess = cleanedGuess.toUpperCase();
             
-            }
-            String[] cleanedArr = cleanedGuess.split(cleanedGuess);
-
-            boolean matched = true; 
+            String[] cleanedArr = cleanedGuess.split("");
             // TO DO: Iterate to determine if all elements of the guess match sequence
+            System.out.println(cleanedArr.length + ", " + randomSeq.length);
+              if(cleanedArr.length == randomSeq.length){
+                for(int i = 0; i < 4; i++){
+                  System.out.println(cleanedArr[i] + randomSeq[i]);
+                  if(cleanedArr[i].equals(randomSeq[i])){
+                    matchScore++;
+                  }
+                }
+              }
             
-            
+            }
+            if(matchScore == 4){
+              matched = true;
+            }
+
             // If match, signal a match, otherwise, try again.
             if (matched)
             {
@@ -67,8 +84,7 @@ public class MemoryGame
             
   
         // TO DO: Ask if user wants to play another round of the game 
-        // and track the number of games played.
-        
+        isPlaying = game.playAgain();
     }
    
     // When done playing, show score and end the game.
